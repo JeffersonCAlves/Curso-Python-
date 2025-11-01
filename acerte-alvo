@@ -1,0 +1,83 @@
+# baixar o Pygame e Importar o Pygame
+import pygame
+import random
+
+# iniciar o Pygame
+pygame.init()
+
+# um som de "blip" ou "acerto" tocar toda vez que o jogador acertar o alvo
+
+pygame.mixer.init()
+
+# (Encontre um som online e salve como 'acerto.wav')
+som_acerto = pygame.mixer.Sound("acerto.wav")
+som_acerto.play()
+
+
+# variaveis relevante para o jogo
+altura_tela = 600
+largura_tela = 800
+
+tela = pygame.display.set_mode((largura_tela, altura_tela))
+pygame.display.set_caption('acerto o alvo')
+
+# variaveis para criar as cores e formas geometricas do jogo
+preto = (0, 0, 0)
+branco = (255, 255, 255)
+vermelho = (255, 0, 0)
+
+# iniciar o fluxo do jogo
+
+# variavel calcular o tempo do jogo que se passou
+relogio = pygame.time.Clock()
+rodando = True
+
+# largura e altura do alvo
+tamanho_alvo = 50
+
+#              onde o alvo vai iniciar, x y
+alvo_rect = pygame.Rect(375, 275, tamanho_alvo, tamanho_alvo)
+
+
+# incluir pontuacao no jogo:
+
+pontuacao = 0
+fonte = pygame.font.SysFont("bahnschrift", 35) # tamanho do texto
+
+
+# fluxo do jogo rodando
+while rodando:
+    # eventos que ocorrem no jogo
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            rodando = False
+
+        if evento.type == pygame.MOUSEBUTTONDOWN: # usando o mouse
+            if alvo_rect.collidepoint(evento.pos): # saber se o clic colidiu com o alvo
+                alvo_rect.x = random.randrange(0, largura_tela - tamanho_alvo)
+                alvo_rect.y = random.randrange(0, altura_tela - tamanho_alvo)
+                pontuacao += 1
+    
+    tela.fill(vermelho) #cor de fundo da tela
+
+# alvo aparecer na tela
+    pygame.draw.rect(tela, preto, alvo_rect) # cor do alvo
+
+# Renderiza o texto (transforma em imagem)
+
+    texto_pontos = fonte.render(f"Pontos: {pontuacao}", True, preto)
+
+
+# Desenha o texto na tela
+    tela.blit(texto_pontos, (10, 10))
+
+    pygame.display.flip() # a partir daqui tudo que aparece na tela
+    relogio.tick(60)
+
+pygame.quit()
+
+
+
+
+
+
